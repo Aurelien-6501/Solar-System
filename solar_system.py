@@ -1,10 +1,10 @@
-import sys, pygame, requests, json
+import sys, pygame, requests, json, random
 pygame.font.init()
 
 screenW, screenH = 1600, 1000
 screen = pygame.display.set_mode((screenW,screenH))
 print(pygame.display.get_window_size())
-
+screen.fill([0, 0, 0])
 
 # ICI ON DEFINIT DES TRUCS
 response = requests.get("https://api.le-systeme-solaire.net/rest.php/bodies?data=id%2CequaRadius%2Cdensity%2Cgravity%2CisPlanet%2CsideralOrbit%2Cperihelion%2Crel&filter%5B%5D=isPlanet%2Ceq%2Ctrue")
@@ -44,6 +44,19 @@ class Planet:
         self.gravity = gravity
         self.color = color
 
+class Star:
+    def __init__(self, starX, starY, starRadius):
+        self.starX = starX
+        self.starY = starY
+        self.starRadius = starRadius
+        
+#Etoile
+max = 200
+min = 0
+while min < max: 
+    etoile = Star(random.randint(0,screenW), random.randint(0,screenH), 2 )   
+    pygame.draw.circle(screen, (255,255,255), (etoile.starX, etoile.starY), etoile.starRadius)
+    min += 1
 
 #Uranus
 uranus = Planet(reponseData["bodies"][0]["id"],reponseData["bodies"][0]["equaRadius"],reponseData["bodies"][0]["density"],reponseData["bodies"][0]["gravity"],(255,255,255))
@@ -93,7 +106,7 @@ while play:
             if event.key == pygame.K_ESCAPE:
                 play = False
 
-    screen.fill([0, 0, 0])
+    
     
     screen.blit(image_soleil, (screenW/2 - 75 , screenH/2 - 75))
     
@@ -122,6 +135,7 @@ while play:
     
     #Mercure
     pygame.draw.circle(screen, mercure.color, (700,screenH/2), mercure.equaRadius)
+    
     
     
     text_surface = my_font.render('Some Text', True, (255, 255, 255))
