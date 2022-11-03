@@ -31,7 +31,9 @@ def jprint(obj):
 
 my_font = pygame.font.SysFont('Albany', 30)
 
+image_soleil = pygame.image.load("Sun.png")
 
+image_soleil = pygame.transform.scale(image_soleil,(150, 150))
 
 
 class Planet:
@@ -92,6 +94,9 @@ while play:
                 play = False
 
     screen.fill([0, 0, 0])
+    
+    screen.blit(image_soleil, (screenW/2 - 75 , screenH/2 - 75))
+    
     # screen.blit(BackGround.image, BackGround.rect)
     
     #Neptune
@@ -101,25 +106,22 @@ while play:
     pygame.draw.circle(screen, uranus.color, (150,screenH/2), uranus.equaRadius)
     
     #Saturne
-    pygame.draw.circle(screen, saturne.color, (275,screenH/2), saturne.equaRadius)
+    pygame.draw.circle(screen, saturne.color, (300,screenH/2), saturne.equaRadius)
     
     #Jupiter
-    pygame.draw.circle(screen, jupiter.color, (400,screenH/2), jupiter.equaRadius)
+    pygame.draw.circle(screen, jupiter.color, (475,screenH/2), jupiter.equaRadius)
     
     #Mars
-    pygame.draw.circle(screen, mars.color, (500,screenH/2), mars.equaRadius)
+    pygame.draw.circle(screen, mars.color, (610,screenH/2), mars.equaRadius)
     
     #Terre
-    pygame.draw.circle(screen, terre.color, (570,screenH/2), terre.equaRadius)
+    pygame.draw.circle(screen, terre.color, (640,screenH/2), terre.equaRadius)
     
     #Venus
-    pygame.draw.circle(screen, venus.color, (620,screenH/2), venus.equaRadius)
+    pygame.draw.circle(screen, venus.color, (670,screenH/2), venus.equaRadius)
     
     #Mercure
-    pygame.draw.circle(screen, mercure.color, (660,screenH/2), mercure.equaRadius)
-    
-    #Soleil
-    pygame.draw.circle(screen, (252,191,40), (screenW/2,screenH/2), 70)
+    pygame.draw.circle(screen, mercure.color, (700,screenH/2), mercure.equaRadius)
     
     
     text_surface = my_font.render('Some Text', True, (255, 255, 255))
