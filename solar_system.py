@@ -133,8 +133,9 @@ while play:
         if event.type == pygame.QUIT:
             play = False
         if event.type == pygame.MOUSEMOTION:
-            pass
+            print(pygame.mouse.get_pos)
             # print(event.pos)
+            
         if event.type == pygame.KEYUP:
             print(event.key, event.unicode, event.scancode)
             if event.key == pygame.K_ESCAPE:
@@ -151,9 +152,12 @@ while play:
     for planet in planetList:
         pygame.draw.circle(screen, planet.color, (getPositionOfPlanet(planet.id),screenH/2), planet.equaRadius)  
     
+    pygame.draw.ellipse(screen, (156,76,8),(500, 450, 200, 100),5)
+    pygame.draw.ellipse(screen, (9,83,131),(360, 490, 75, 25),2)
+
     text_surface = my_font.render('Some Text', True, (255, 255, 255))
     screen.blit(text_surface, (0,0))
- 
+
 
     clock.tick(60)
     pygame.display.flip()
