@@ -6,20 +6,72 @@ screen = pygame.display.set_mode((screenW,screenH))
 print(pygame.display.get_window_size())
 screen.fill([0, 0, 0])
 
-# ICI ON DEFINIT DES TRUCS
+# APPEL API
 response = requests.get("https://api.le-systeme-solaire.net/rest.php/bodies?data=id%2CequaRadius%2Cdensity%2Cgravity%2CisPlanet%2CsideralOrbit%2Cperihelion%2Crel&filter%5B%5D=isPlanet%2Ceq%2Ctrue")
+if response.status_code == 400 :
+    print("error" + response.status_code)
+else:
+    print(response.status_code)
+    
 reponseData = json.loads(response.text)
 
-print(response.status_code)
 
 
-def jprint(obj):
-    # create a formatted string of the Python JSON object
-    text = json.dumps(obj, sort_keys=True, indent=4)
-    print(text)
+# COLORS
+    
+COLOR_NEPTUNE = (10,148,190)
+COLOR_URANUS = (62,184,221)
+COLOR_SATURNE = (229,157,43)
+COLOR_JUPITER = (227,118,25)
+COLOR_MARS = (227,62,25)
+COLOR_TERRE = (25,153,218)
+COLOR_VENUS = (184,20,18)
+COLOR_MERCURE = (170,112,65)
 
 
+def getColorOfPlanet(planetName):
+    match planetName:
+        case 'neptune':
+            return COLOR_NEPTUNE
+        case 'uranus':
+            return COLOR_URANUS
+        case 'saturne':
+            return COLOR_SATURNE
+        case 'jupiter':
+            return COLOR_JUPITER
+        case 'mars':
+            return COLOR_MARS
+        case 'terre':
+            return COLOR_TERRE
+        case 'venus':
+            return COLOR_VENUS
+        case 'mercure':
+            return COLOR_MERCURE
+        case _:
+            return "0"
 
+def getPositionOfPlanet(planetName):
+    match planetName:
+        case 'neptune':
+            return 250
+        case 'uranus':
+            return 400
+        case 'saturne':
+            return 600
+        case 'jupiter':
+            return 820
+        case 'mars':
+            return 1000
+        case 'terre':
+            return 1100
+        case 'venus':
+            return 1200
+        case 'mercure':
+            return 1275
+        case _:
+            return "error position"
+
+# BACKGROUND AVEC IMAGE
 # class Background(pygame.sprite.Sprite):
 #     def __init__(self, image_file, location):
 #         pygame.sprite.Sprite.__init__(self)  
@@ -29,6 +81,7 @@ def jprint(obj):
 
 # BackGround = Background('background.jpg', [0,0])
 
+
 my_font = pygame.font.SysFont('Albany', 30)
 
 image_soleil = pygame.image.load("Sun.png")
@@ -37,12 +90,14 @@ image_soleil = pygame.transform.scale(image_soleil,(150, 150))
 
 
 class Planet:
-    def __init__(self, id, equaRadius, density, gravity, color):
+    def __init__(self, id, equaRadius, density, gravity, perihelion, color, position):
         self.id = id
         self.equaRadius = equaRadius/1000
         self.density = density
         self.gravity = gravity
+        self.perihelion = perihelion
         self.color = color
+        self.position = position
 
 class Star:
     def __init__(self, starX, starY, starRadius):
@@ -58,37 +113,15 @@ while min < max:
     pygame.draw.circle(screen, (255,255,255), (etoile.starX, etoile.starY), etoile.starRadius)
     min += 1
 
-#Uranus
-uranus = Planet(reponseData["bodies"][0]["id"],reponseData["bodies"][0]["equaRadius"],reponseData["bodies"][0]["density"],reponseData["bodies"][0]["gravity"],(255,255,255))
-print(uranus.id)
+# Planete
+planetList = []
+for planet in reponseData["bodies"]:
+    print(planet["id"])
+    print(planet["equaRadius"])
+    print(planet["density"])
+    print(planet["gravity"])
 
-#Neptune
-neptune = Planet(reponseData["bodies"][1]["id"],reponseData["bodies"][1]["equaRadius"],reponseData["bodies"][1]["density"],reponseData["bodies"][1]["gravity"],(255,255,255))
-print(neptune.id)
-
-#Jupiter
-jupiter = Planet(reponseData["bodies"][2]["id"],reponseData["bodies"][2]["equaRadius"],reponseData["bodies"][2]["density"],reponseData["bodies"][2]["gravity"],(167,132,32))
-print(jupiter.id)
-
-#Mars
-mars = Planet(reponseData["bodies"][3]["id"],reponseData["bodies"][3]["equaRadius"],reponseData["bodies"][3]["density"],reponseData["bodies"][3]["gravity"],(255,255,255))
-print(mars.id)
-
-#Mercure
-mercure = Planet(reponseData["bodies"][4]["id"],reponseData["bodies"][4]["equaRadius"],reponseData["bodies"][4]["density"],reponseData["bodies"][4]["gravity"],(170,112,65))
-print(neptune.id)
-
-#Saturne
-saturne = Planet(reponseData["bodies"][5]["id"],reponseData["bodies"][5]["equaRadius"],reponseData["bodies"][5]["density"],reponseData["bodies"][5]["gravity"],(211,189,56))
-print(neptune.id)
-
-#Terre
-terre = Planet(reponseData["bodies"][6]["id"],reponseData["bodies"][6]["equaRadius"],reponseData["bodies"][6]["density"],reponseData["bodies"][6]["gravity"],(25,153,218))
-print(terre.id)
-
-#Venus
-venus = Planet(reponseData["bodies"][7]["id"],reponseData["bodies"][7]["equaRadius"],reponseData["bodies"][7]["density"],reponseData["bodies"][7]["gravity"],(184,20,18))
-print(neptune.id)
+    planetList.append(Planet(planet["id"], planet["equaRadius"], planet["density"], planet["gravity"], planet["perihelion"], getColorOfPlanet(planet["id"]), getPositionOfPlanet(planet["id"])))
 
 
 play = True
@@ -108,40 +141,18 @@ while play:
 
     
     
-    screen.blit(image_soleil, (screenW/2 - 75 , screenH/2 - 75))
+    screen.blit(image_soleil, (1400 - 75 , screenH/2 - 75))
     
     # screen.blit(BackGround.image, BackGround.rect)
     
-    #Neptune
-    pygame.draw.circle(screen, neptune.color, (50,screenH/2), neptune.equaRadius)
-    
-    #Uranus
-    pygame.draw.circle(screen, uranus.color, (150,screenH/2), uranus.equaRadius)
-    
-    #Saturne
-    pygame.draw.circle(screen, saturne.color, (300,screenH/2), saturne.equaRadius)
-    
-    #Jupiter
-    pygame.draw.circle(screen, jupiter.color, (475,screenH/2), jupiter.equaRadius)
-    
-    #Mars
-    pygame.draw.circle(screen, mars.color, (610,screenH/2), mars.equaRadius)
-    
-    #Terre
-    pygame.draw.circle(screen, terre.color, (640,screenH/2), terre.equaRadius)
-    
-    #Venus
-    pygame.draw.circle(screen, venus.color, (670,screenH/2), venus.equaRadius)
-    
-    #Mercure
-    pygame.draw.circle(screen, mercure.color, (700,screenH/2), mercure.equaRadius)
-    
-    
+
+    #DRAW PLANETE
+    for planet in planetList:
+        pygame.draw.circle(screen, planet.color, (getPositionOfPlanet(planet.id),screenH/2), planet.equaRadius)  
     
     text_surface = my_font.render('Some Text', True, (255, 255, 255))
     screen.blit(text_surface, (0,0))
  
-    # ICI ON AFFICHE ET ON BOUGE DES TRUCS
 
     clock.tick(60)
     pygame.display.flip()
