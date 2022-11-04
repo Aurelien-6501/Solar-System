@@ -49,7 +49,7 @@ def getColorOfPlanet(planetName):
         case 'mercure':
             return COLOR_MERCURE
         case _:
-            return "0"
+            return "error color"
 
 def getPositionOfPlanet(planetName):
     match planetName:
