@@ -84,7 +84,7 @@ def getPositionOfPlanet(planetName):
 
 my_font = pygame.font.SysFont('Albany', 30)
 
-image_soleil = pygame.image.load("Sun.png")
+image_soleil = pygame.image.load("Images\Sun.png")
 
 image_soleil = pygame.transform.scale(image_soleil,(150, 150))
 
