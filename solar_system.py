@@ -8,6 +8,7 @@ screen.fill([0, 0, 0])
 
 # APPEL API
 response = requests.get("https://api.le-systeme-solaire.net/rest.php/bodies?data=id%2CequaRadius%2Cdensity%2Cgravity%2CisPlanet%2CsideralOrbit%2Cperihelion%2Crel&filter%5B%5D=isPlanet%2Ceq%2Ctrue")
+
 if response.status_code == 400 :
     print("error" + response.status_code)
 else:
@@ -106,10 +107,10 @@ class Star:
         self.starRadius = starRadius
         
 #Etoile
-max = 200
-min = 0
-while min < max: 
-    etoile = Star(random.randint(0,screenW), random.randint(0,screenH), 2 )   
+max = range(200)
+
+for min in max: 
+    etoile = Star(random.randint(0,screenW), random.randint(0,screenH), 1 )   
     pygame.draw.circle(screen, (255,255,255), (etoile.starX, etoile.starY), etoile.starRadius)
     min += 1
 
