@@ -72,6 +72,12 @@ def getPositionOfPlanet(planetName):
         case _:
             return "error position"
 
+
+def show_planet_name():
+    text_surface = my_font.render(planet.id, True, (255, 255, 255))
+    screen.blit(text_surface, (getPositionOfPlanet(planet.id),600 ))
+
+
 # BACKGROUND AVEC IMAGE
 # class Background(pygame.sprite.Sprite):
 #     def __init__(self, image_file, location):
@@ -83,7 +89,7 @@ def getPositionOfPlanet(planetName):
 # BackGround = Background('background.jpg', [0,0])
 
 
-my_font = pygame.font.SysFont('Albany', 30)
+my_font = pygame.font.SysFont('Albany', 25)
 
 image_soleil = pygame.image.load("Images\Sun.png")
 
@@ -91,6 +97,7 @@ image_soleil = pygame.transform.scale(image_soleil,(150, 150))
 
 
 class Planet:
+    SCALE = 200
     def __init__(self, id, equaRadius, density, gravity, perihelion, color, position):
         self.id = id
         self.equaRadius = equaRadius/1000
@@ -107,10 +114,10 @@ class Star:
         self.starRadius = starRadius
         
 #Etoile
-max = range(200)
+max = range(300)
 
 for min in max: 
-    etoile = Star(random.randint(0,screenW), random.randint(0,screenH), 1 )   
+    etoile = Star(random.randint(0,screenW), random.randint(0,screenH), 1)   
     pygame.draw.circle(screen, (255,255,255), (etoile.starX, etoile.starY), etoile.starRadius)
     min += 1
 
@@ -132,8 +139,8 @@ while play:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             play = False
-        if event.type == pygame.MOUSEMOTION:
-            print(pygame.mouse.get_pos)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            print("oui")
             # print(event.pos)
             
         if event.type == pygame.KEYUP:
@@ -151,12 +158,11 @@ while play:
     #DRAW PLANETE
     for planet in planetList:
         pygame.draw.circle(screen, planet.color, (getPositionOfPlanet(planet.id),screenH/2), planet.equaRadius)  
-    
+        show_planet_name()
+        
     pygame.draw.ellipse(screen, (156,76,8),(500, 450, 200, 100),5)
     pygame.draw.ellipse(screen, (9,83,131),(360, 490, 75, 25),2)
-
-    text_surface = my_font.render('Some Text', True, (255, 255, 255))
-    screen.blit(text_surface, (0,0))
+    
 
 
     clock.tick(60)
